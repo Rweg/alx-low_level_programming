@@ -8,18 +8,14 @@
  */
 int main(void)
 {
-	int i, sum1, sum2;
+	int i, sum2;
 
-	sum1 = 0;
 	sum2 = 0;
 	for (i = 0; i < 1024; i++)
 	{
-		if (i < 10 && ((i % 3) == 0 || (i % 5) == 0))
-			sum1 += i;
-		sum2 += i;
+		if ((i % 3) == 0 || (i % 5) == 0)
+			sum2 += i;
 	}
-
-	printf("%d", sum1);
 	printf("%d\n", sum2);
 
 	return (0);
