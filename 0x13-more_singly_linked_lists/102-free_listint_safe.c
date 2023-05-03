@@ -36,7 +36,7 @@ size_t free_listint_safe(listint_t **h)
         }
 		tmp = current;
 		current = current->next;
-		free(temp);
+		free(tmp);
 		len++;
 	}
 
