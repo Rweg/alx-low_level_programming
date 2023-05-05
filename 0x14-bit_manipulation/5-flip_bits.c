@@ -6,19 +6,21 @@
  * @n: first number
  * @m: second number
  *
- * Return: number of bits to change
+ * Return: Returns the number of bits to flip
  */
+
 unsigned int flip_bits(unsigned long int n, unsigned long int m)
 {
-	unsigned int count = 0;
-	unsigned long int exclusive = n ^ m;
-	unsigned int num_bits = sizeof(unsigned long int) * 8;
+	int i, counter = 0;
+	unsigned long int current;
+	unsigned long int diff = n ^ m;
 
-	for (unsigned int i = 0; i < num_bits; i++)
+	for (i = 63; i >= 0; i--)
 	{
-		if ((exclusive >> i) & 1)
-			count++;
+		current = diff >> i;
+		if (current & 1)
+			counter++;
 	}
 
-	return (count);
+	return (counter);
 }
