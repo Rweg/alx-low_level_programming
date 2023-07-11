@@ -1,42 +1,45 @@
 #include "main.h"
-#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /**
- * create_file - Creates a file with given text content
- * @filename: The name of the file to create
- * @text_content: a NULL terminated string to write to the file
+ * main - Copies the contents of a file to another file.
+ * @argc: The number of arguments supplied to the program.
+ * @argv: An array of pointers to the arguments.
  *
- * Return: 1 on success, -1 on failure
+ * Return: 0 on success.
+ *
+ * Description: If the argument count is incorrect - exit code 97.
+ * If file_from does not exist or cannot be read - exit code 98.
+ * If file_to cannot be created or written to - exit code 99.
+ * If file_to or file_from cannot be closed - exit code 100.
  */
-
-int create_file(const char *filename, char *text_content)
+int main(int argc, char *argv[])
 {
-	int fd, w, len = 0;
+	int src, dest, r, w;
+	char buffer[1024];
+	char *error_msg = "Error: Can't read from file";
 
-	if (!filename)
-		return (-1);
+	if (argc != 3)
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n"), exit(97);
 
-	if (text_content)
+	src = open(argv[1], O_RDONLY), r = read(src, buffer, 1024);
+	if (src == -1 || r == -1)
+		dprintf(STDERR_FILENO, error_msg, argv[1]), exit(98);
+
+	dest = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
+	if (dest == -1)
+		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]), exit(99);
+
+	while (r > 0)
 	{
-		while (text_content[len])
-			len++;
+		w = write(dest, buffer, r);
+		if (w == -1)
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]), exit(99);
+
+		r = read(src, buffer, 1024);
 	}
 
-	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
-	if (fd == -1)
-		return (-1);
-
-	if (text_content)
-	{
-		w = write(fd, text_content, len);
-		if (w == -1 || w != len)
-		{
-			close(fd);
-			return (-1);
-		}
-	}
-
-	close(fd);
-
-	return (1);
+	close(src), close(dest);
+	return (0);
 }
