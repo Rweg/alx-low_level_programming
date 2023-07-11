@@ -1,6 +1,7 @@
-#ifndef ELF_H
-#define ELF_H
+#ifndef ELFHEAD_H
+#define ELFHEAD_H
 
+#include <elf.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>

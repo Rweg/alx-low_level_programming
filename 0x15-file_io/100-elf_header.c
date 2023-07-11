@@ -1,4 +1,4 @@
-#include <elf.h>
+#include <elf_header.h>
 
 /**
  * vldt_e - It verifies if a file is an ELF file.
